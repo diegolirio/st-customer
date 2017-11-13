@@ -18,7 +18,7 @@ server:
   
 eureka:
   instance:
-    hostname: localhost
+    hostname: 31.220.55.236
     port: 5002
   client:
     registerWithEureka: true

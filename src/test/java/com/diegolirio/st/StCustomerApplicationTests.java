@@ -11,6 +11,8 @@ public class StCustomerApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		String [] args = {};
+		StCustomerApplication.main(args);
 	}
 
 }
