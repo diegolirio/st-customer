@@ -8,4 +8,10 @@ public interface CustomerService {
 
 	List<Customer> findAll();
 
+	Customer findByCpfCnpj(String cpfCnpj);
+
+	Customer save(Customer customer);
+
+	void delete(String id);
+
 }

@@ -1,6 +1,5 @@
 package com.diegolirio.st.apis.v1;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,52 +17,57 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.diegolirio.st.domain.orm.Address;
 import com.diegolirio.st.domain.orm.Customer;
+import com.diegolirio.st.domain.orm.State;
 import com.diegolirio.st.fixture.FixtureTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class CustomerApiRestControllerTests {
+public class AddressApiRestServiceTests {
 
 	@Autowired
 	private MockMvc mockMvc;
-
+	
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	@Autowired
 	private FixtureTests fixture;
 	
-	private Customer customer;
-	
-    @Before
-    public void init() {
-    	customer = fixture.fixtureCustomer();
-    }
+	private Address address;
+
+	@Before
+	public void before() throws UnsupportedEncodingException, Exception {
+		State state = null;
+		address = fixture.fixtureAddress(null, state);
+	}
 	
 	@Test
-	public void testFindAll() throws Exception {
-		mockMvc.perform(get(CustomerApiRestService.URL).accept(MediaType.APPLICATION_JSON_UTF8))
-							.andExpect(status().isOk());
+	public void testFindAddressesByPeople() throws Exception {
+		mockMvc.perform(get(AddressApiRestService.URL+"/people/5a10c29576606f1b5df2ae18")
+							.accept(MediaType.APPLICATION_JSON_UTF8))
+						.andExpect(status().isOk());
 	}
 	
 	@Test
 	public void testSave() throws Exception {
-		postCustomer();
+		Customer customer = postCustomer();
+		address.setPeople(customer);
+		String json = objectMapper.writeValueAsString(address);
+		System.out.println(json);
+		mockMvc.perform(post(AddressApiRestService.URL)
+							.accept(MediaType.APPLICATION_JSON_UTF8)
+							.contentType(MediaType.APPLICATION_JSON_UTF8)
+							.content(json))
+						.andExpect(status().isOk());
+						
 	}
 	
-	@Test
-	public void testDelete() throws Exception {
-		customer.setCpfCnpj("626261515"); 
-		Customer customerSaved = postCustomer();
-		mockMvc.perform(delete(CustomerApiRestService.URL+"/"+customerSaved.getId())
-								.accept(MediaType.APPLICATION_JSON_UTF8))
-							.andExpect(status().isOk());
-	}
-
 	private Customer postCustomer() throws UnsupportedEncodingException, Exception {
+		Customer customer = fixture.fixtureCustomer();
 		String jsonCustomer = objectMapper.writeValueAsString(customer);
 		String jsonCustomerSaved = mockMvc.perform(post(CustomerApiRestService.URL)
 													.accept(MediaType.APPLICATION_JSON_UTF8)
@@ -73,6 +77,6 @@ public class CustomerApiRestControllerTests {
 												.andReturn().getResponse().getContentAsString();
 		return objectMapper.readValue(jsonCustomerSaved, Customer.class);
 	}	
-	
+
 	
 }

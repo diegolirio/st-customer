@@ -7,15 +7,27 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection="customers")
-public class Customer extends People {
+@Document(collection="address")
+public class Address {
 
 	@Id
 	private String id;
-
+	
+	private String cep, publicPlace, neighborhood, city;
+	
+	private int number;
+	
+	private State state;
+	
+	@Setter
+	private People people;
+	
+	private boolean active;
+	
 }
