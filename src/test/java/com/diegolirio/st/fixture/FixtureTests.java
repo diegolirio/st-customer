@@ -8,6 +8,7 @@ import com.diegolirio.st.domain.orm.Address;
 import com.diegolirio.st.domain.orm.Customer;
 import com.diegolirio.st.domain.orm.People;
 import com.diegolirio.st.domain.orm.State;
+import com.diegolirio.st.domain.orm.Telephone;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
@@ -38,6 +39,17 @@ public class FixtureTests {
 			add("active", true);
 		}});
 		return Fixture.from(Address.class).gimme("valid");
+	}
+
+
+	public Telephone fixtureTelephone(People people) {
+		Fixture.of(Telephone.class).addTemplate("valid", new Rule() {{
+			add("contactType", "COMERCIAL");
+			add("number", "11961409798");
+			add("people", people);
+			add("active", true);
+		}});
+		return Fixture.from(Telephone.class).gimme("valid");
 	}	
 	
 }

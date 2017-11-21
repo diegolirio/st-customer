@@ -17,37 +17,35 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.diegolirio.st.domain.orm.Address;
 import com.diegolirio.st.domain.orm.Customer;
-import com.diegolirio.st.domain.orm.State;
+import com.diegolirio.st.domain.orm.Telephone;
 import com.diegolirio.st.fixture.FixtureTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class AddressApiRestServiceTests {
+public class TelephoneApiRestServiceTests {
 
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
 	@Autowired
 	private FixtureTests fixture;
 	
-	private Address address;
+	private Telephone telephone;
 
 	@Before
 	public void before() throws UnsupportedEncodingException, Exception {
-		State state = null;
-		address = fixture.fixtureAddress(null, state);
-	}
+		telephone = fixture.fixtureTelephone(null); 
+	}	
 	
 	@Test
-	public void testFindAddressesByPeople() throws Exception {
-		mockMvc.perform(get(AddressApiRestService.URL+"/people-cpfcnpj/35357659869")
+	public void testFindByCpfCnpj() throws Exception {
+		mockMvc.perform(get(TelephoneApiRestService.URL+"/people-cpfcnpj/35357659869")
 							.accept(MediaType.APPLICATION_JSON_UTF8))
 						.andExpect(status().isOk());
 	}
@@ -55,15 +53,14 @@ public class AddressApiRestServiceTests {
 	@Test
 	public void testSave() throws Exception {
 		Customer customer = postCustomer();
-		address.setPeople(customer);
-		String json = objectMapper.writeValueAsString(address);
+		telephone.setPeople(customer);
+		String json = objectMapper.writeValueAsString(telephone);
 		System.out.println(json);
-		mockMvc.perform(post(AddressApiRestService.URL)
+		mockMvc.perform(post(TelephoneApiRestService.URL)
 							.accept(MediaType.APPLICATION_JSON_UTF8)
 							.contentType(MediaType.APPLICATION_JSON_UTF8)
 							.content(json))
 						.andExpect(status().isOk());
-						
 	}
 	
 	private Customer postCustomer() throws UnsupportedEncodingException, Exception {
@@ -76,7 +73,6 @@ public class AddressApiRestServiceTests {
 												.andExpect(status().isOk())
 												.andReturn().getResponse().getContentAsString();
 		return objectMapper.readValue(jsonCustomerSaved, Customer.class);
-	}	
-
+	}		
 	
 }

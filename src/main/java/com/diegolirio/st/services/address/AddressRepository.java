@@ -6,7 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.diegolirio.st.domain.orm.Address;
-import com.diegolirio.st.domain.orm.People;
 
 @Repository
 public interface AddressRepository extends CrudRepository<Address, String> {
