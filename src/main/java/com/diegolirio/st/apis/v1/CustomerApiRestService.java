@@ -3,6 +3,8 @@ package com.diegolirio.st.apis.v1;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,10 +33,12 @@ public class CustomerApiRestService {
 	private CustomerService customerService;
 
 	@GetMapping
+	@Cacheable(value="customerFindAll")
 	public ResponseEntity<?> findAll() {
 		return new ResponseEntity<List<Customer>>(this.customerService.findAll(), HttpStatus.OK);
 	}
 	
+	@CacheEvict(value= {"customerFindAll", "customerCustomCpfCnpj"}, allEntries=true)
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Customer customer) {
 		return new ResponseEntity<Customer>(this.customerService.save(customer), HttpStatus.OK);
@@ -47,7 +51,9 @@ public class CustomerApiRestService {
 	}		
 	
 	@GetMapping("/cpfcnpj/{cpfCnpj}")
+	@Cacheable(value="customerCustomCpfCnpj")
 	public ResponseEntity<?> findByCpfCnpj(@PathVariable("cpfCnpj") String cpfCnpj) {
+		System.out.println("findByCpfCnpj("+cpfCnpj+")");
 		return new ResponseEntity<Customer>(this.customerService.findByCpfCnpj(cpfCnpj), HttpStatus.OK); 
 	}
 }
