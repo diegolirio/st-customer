@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.diegolirio.st.domain.orm.Telephone;
 import com.diegolirio.st.services.telephone.TelephoneService;
 
+import io.swagger.annotations.Api;
+
 @CrossOrigin
 @RestController
+@Api(value="TelephoneApi")
 @RequestMapping(TelephoneApiRestService.URL)
 public class TelephoneApiRestService {
 

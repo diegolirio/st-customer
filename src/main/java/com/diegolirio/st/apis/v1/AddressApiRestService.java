@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.diegolirio.st.domain.orm.Address;
 import com.diegolirio.st.services.address.AddressService;
 
+import io.swagger.annotations.Api;
+
 @CrossOrigin
 @RestController
+@Api(value="AddressApi")
 @RequestMapping(AddressApiRestService.URL)
 public class AddressApiRestService {
 
