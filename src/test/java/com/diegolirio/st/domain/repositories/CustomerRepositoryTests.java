@@ -18,7 +18,7 @@ public class CustomerRepositoryTests {
 	
 	@Autowired
 	private CustomerRepository customerRepository;
-	
+	 
 	private Customer customer = Customer.builder().build();
 
     @Test
